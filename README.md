@@ -3,7 +3,7 @@ Final Project: Scoundrel (a card based rougelike game) Members: Luca Sheridan an
 
 Based directly on this game: http://www.stfj.net/art/2011/Scoundrel.pdf
 
-Description:
+## Description
 
 Scoundrel is a one player game based on a standard deck of cards.
 It involves drawing four cards to create a "room" of a dungeon and the goal of the game is to progress through all the rooms and finish the dungeon.
@@ -18,7 +18,7 @@ Your weapon and its status remains with you between rooms
 Before interacting with a room you can run from it and the four cards are placed on the bottom of the deck. You cannot run from two rooms in a row.
 The project will be built in python
 
-What our game needs:
+## What our game needs
 
 Fully implement all the rules and mechanics
 Random number generator to shuffle the cards
