@@ -23,10 +23,11 @@ class Background: #This deals with all the background stuff like creating the de
         print(f"Cards left in deck: {len(self.deck)}.")
 
 class Cards: #This class deals with all the aftermath of choosing a card
-    def __init__(self):
+    def __init__(self, background):
+        self.background = background
         self.stack_value = 0
-        self.weapon = 0
         self.card_value = 0  
+        
 
     def black_cards(self, health, card):
         if self.card_value(card) < self.stack_value:
@@ -38,8 +39,8 @@ class Cards: #This class deals with all the aftermath of choosing a card
     def hearts(self, health, card):
         return health + self.card_value(card)
     
-    def weapon(self, card): #The diamonds card 
-        self.weapon = self.cardvalue(card)
+    def set_weapon(self, card): #The diamonds card 
+        self.weapon_value = self.cardvalue(card)
 
     def stack(self, card): #Stack of diamonds under the weapon
         if card[-1] in "♠♣":  
@@ -66,6 +67,8 @@ class Cards: #This class deals with all the aftermath of choosing a card
 class Turn: #This class deals with the player's turn and choosing a card
     def __init__(self, background):
         self.background = background  
+        self.cards = Cards(self.background)
+        self.chosen_card = None
 
     def choose_card(self):
 
@@ -75,27 +78,28 @@ class Turn: #This class deals with the player's turn and choosing a card
         try:
             card_index = int(input()) - 1
             if 0 <= card_index < 4:
-                chosen_card = self.background.deck.pop(card_index)
-                print("You played", chosen_card)
-                if chosen_card[-1] in "♠♣":
-                    self.background.health = Cards().black_cards(self.background.health, chosen_card, Cards().stack(chosen_card))
-                elif chosen_card[-1] == "♥":
-                    self.background.health = Cards().hearts(self.background.health, chosen_card)
+                self.chosen_card = self.background.deck.pop(card_index)
+                print("You played", self.chosen_card)
+
+                if self.chosen_card[-1] in "♠♣":
+                    self.background.health = self.cards.black_cards(self.background.health, self.chosen_card)
+                elif self.chosen_card[-1] == "♥":
+                    self.background.health = self.cards.hearts(self.background.health, self.chosen_card)
                 else:
-                    self.background.health = Cards().diamonds(chosen_card)
+                    self.cards.weapon(self.chosen_card)
             else:
-                print("Invalid choice, out of range.")
+                print("Invalid choice")
         except ValueError:
             print("Invalid input")
 
 class Game: #This class deals with compiling the other stuff
     def __init__(self):
         self.background = Background()
-        self.cards = Cards()
+        self.cards = Cards(self.background)
         self.turn = Turn(self.background)
 
-    def play(self, health):
-        while health > 0:
+    def play(self):
+        while self.background.health > 0:
             self.turn.choose_card()
             self.background.print_cards_left()
             self.background.print_health()
@@ -103,4 +107,4 @@ class Game: #This class deals with compiling the other stuff
             
 
 game_instance = Game()
-game_instance.play(game_instance.background.health)
+game_instance.play()
