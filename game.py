@@ -12,6 +12,7 @@ class Background:
         ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
         deck = [f"{rank}{suit}" for rank in ranks for suit in suits]
         random.shuffle(deck)
+        print(deck) # debug
         return deck
 
     def print_cards(self):
@@ -28,36 +29,54 @@ class Background:
     def update_cards(self):
         # Show the next set of cards once 3 cards are used
         if self.cards_shown < 2:
-            self.deck = self.deck[3:]
+            # self.deck = self.deck[3:] # this caused it to skip cards
             self.cards_shown = 4
 
 class Cards:
     # This class handles the aftermath of choosing a card.
     def __init__(self):
         self.weapon_value = 0
+        self.weapon_str = " " # to give the weapon a visual 
         self.stack_value = 0
 
     def black_cards(self, health, card):
-        # Subtract the weapon value from the damage dealt by black cards
-        damage = self.card_value(card) - self.weapon_value
+        # weapon behavior is a bit complicated
+        #   - a new weapon ("top" card is diamond) can be used for any black card 
+        #   - a used weapon can only be used for black cards equal to or less than the current value
+        #   - you can always fight with fists and have 0 defense. This keeps your weapon as is
+        
+        value = self.card_value(card) 
+        if value > self.weapon_value and self.weapon_str[-1] != "♦":
+            return health - value
+    
+        if input("Fight with (W)eapon or (F)ists: ").upper().strip()[0] == "F":
+            return health - value
+
+        # weapon fighting was selected
+        #if self.weapon_str[-1] == "♦": # new weapon
+        damage = max(0, value - self.weapon_value) # make sure there is no negative damage
+        self.weapon_value = value
+        self.weapon_str += "->" + card
         return health - damage
 
     def hearts(self, health, card):
         # For hearts: add the card value to health.
-        return health + self.card_value(card)
+        return min(20, health + self.card_value(card)) 
 
     def set_weapon(self, card):
         # For diamonds: set the weapon value based on the card.
         self.weapon_value = self.card_value(card)
+        self.weapon_str = card
         print("Weapon value", self.weapon_value)
         return self.weapon_value
 
-    def stack(self, card):
-        # Stack of diamonds under the weapon.
-        card_val = self.card_value(card)
-        if self.stack_value is None or card_val < self.stack_value:
-            self.stack_value = card_val
-        return self.stack_value
+    ## I'm not sure what you planed to use stack() to do, but I handled the weapon behavior within black cards
+    #def stack(self, card):
+    #    # Stack of diamonds under the weapon.
+    #    card_val = self.card_value(card)
+    #    if self.stack_value is None or card_val < self.stack_value:
+    #        self.stack_value = card_val
+    #    return self.stack_value
 
     def card_value(self, card):
         # Returns the numerical value of a card.
@@ -81,13 +100,26 @@ class Turn:
         self.background = background
         self.cards = cards
         self.chosen_card = None
+        self.new_room = True
 
     def choose_card(self):
+        print("\n\n")
         self.background.print_cards()
+        print("Weapon: " + self.cards.weapon_str)
+        print("Health:", self.background.health, "\n")
         try:
-            card_index = int(input("Choose a card position to play (1-4): ")) - 1
+            if self.new_room: 
+                if input("Run from room? Y/N: ").strip().upper()[0] == "Y":
+                    current_room = self.background.deck[0:4]
+                    self.background.deck = self.background.deck[4:]
+                    self.background.deck.extend(current_room)
+                    self.background.print_cards()
+                    print("Weapon: " + self.cards.weapon_str)
+                    print("Health:", self.background.health, "\n")
 
-            if 0 <= card_index < 4:
+
+            card_index = int(input("Choose a card position to play (1-" + str(self.background.cards_shown) + "): ")) - 1
+            if 0 <= card_index < self.background.cards_shown:
                 self.background.cards_shown -= 1
                 self.chosen_card = self.background.deck.pop(card_index)
                 print("You played", self.chosen_card)
@@ -101,6 +133,10 @@ class Turn:
                 else:
                     print("Invalid card suit")
                 
+                if self.background.cards_shown < 2: 
+                    self.new_room = True
+                else: 
+                    self.new_room = False
                 self.background.update_cards()  # Update the deck after a card is used
             else:
                 print("Invalid choice: Number must be between 1 and 4.")
@@ -118,7 +154,11 @@ class Game:
         while self.background.health > 0 and len(self.background.deck) > 0:
             self.turn.choose_card()
             self.background.print_cards_left()
-            self.background.print_health()
+
+        if sef.background.health > 0:
+            print("You win!!")
+        else: 
+            print("You lose :(") 
 
 # Start the game
 if __name__ == "__main__":
