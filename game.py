@@ -155,7 +155,7 @@ class Game:
             self.turn.choose_card()
             self.background.print_cards_left()
 
-        if sef.background.health > 0:
+        if self.background.health > 0:
             print("You win!!")
         else: 
             print("You lose :(") 
