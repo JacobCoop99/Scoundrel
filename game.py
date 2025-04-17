@@ -11,8 +11,10 @@ class Background:
         suits = ["♠", "♣", "♥", "♦"]
         ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
         deck = [f"{rank}{suit}" for rank in ranks for suit in suits]
+        for card in deck:
+            if card[-1] == "♦" and card[0] in "JQKA":
+                deck.remove(card)
         random.shuffle(deck)
-        print(deck) # debug
         return deck
 
     def print_cards(self):
@@ -48,8 +50,13 @@ class Cards:
         value = self.card_value(card) 
         if value > self.weapon_value and self.weapon_str[-1] != "♦":
             return health - value
-    
-        if input("Fight with (W)eapon or (F)ists: ").upper().strip()[0] == "F":
+        choice = input("Fight with (W)eapon or (F)ists: ").upper().strip()
+        if choice == "F":
+            return health - value
+        elif choice == "W":
+            pass
+        else:
+            print("Invalid choice. Defaulting to fists.")
             return health - value
 
         # weapon fighting was selected
@@ -109,14 +116,17 @@ class Turn:
         print("Health:", self.background.health, "\n")
         try:
             if self.new_room: 
-                if input("Run from room? Y/N: ").strip().upper()[0] == "Y":
+                run= input("Run from room? Y/N: ").strip().upper()
+                while run != "Y" and run != "N":
+                    print("Invalid input.")
+                    run = input("Run from room? Y/N: ").strip().upper()
+                if run == "Y":
                     current_room = self.background.deck[0:4]
                     self.background.deck = self.background.deck[4:]
                     self.background.deck.extend(current_room)
                     self.background.print_cards()
                     print("Weapon: " + self.cards.weapon_str)
                     print("Health:", self.background.health, "\n")
-
 
             card_index = int(input("Choose a card position to play (1-" + str(self.background.cards_shown) + "): ")) - 1
             if 0 <= card_index < self.background.cards_shown:
@@ -158,7 +168,21 @@ class Game:
         if self.background.health > 0:
             print("You win!!")
         else: 
-            print("You lose :(") 
+            print("No Health You lose :(") 
+            print("⠀    ⣀⣠⠤⠶⠶⣖⡛⠛⠿⠿⠯⠭⠍⠉⣉⠛⠚⠛⠲⣄⠀⠀⠀⠀⠀")
+            print("⠀⠀⢀⡴⠋⠁⠀⡉⠁⢐⣒⠒⠈⠁⠀⠀⠀⠈⠁⢂⢅⡂⠀⠀⠘⣧⠀⠀⠀⠀")
+            print("⠀⠀⣼⠀⠀⠀⠁⠀⠀⠀⠂⠀⠀⠀⠀⢀⣀⣤⣤⣄⡈⠈⠀⠀⠀⠘⣇⠀⠀⠀")
+            print("⢠⡾⠡⠄⠀⠀⠾⠿⠿⣷⣦⣤⠀⠀⣾⣋⡤⠿⠿⠿⠿⠆⠠⢀⣀⡒⠼⢷⣄⠀")
+            print("⣿⠊⠊⠶⠶⢦⣄⡄⠀⢀⣿⠀⠀⠀⠈⠁⠀⠀⠙⠳⠦⠶⠞⢋⣍⠉⢳⡄⠈⣧")
+            print("⢹⣆⡂⢀⣿⠀⠀⡀⢴⣟⠁⠀⢀⣠⣘⢳⡖⠀⠀⣀⣠⡴⠞⠋⣽⠷⢠⠇⠀⣼")
+            print("⠀⢻⡀⢸⣿⣷⢦⣄⣀⣈⣳⣆⣀⣀⣤⣭⣴⠚⠛⠉⣹⣧⡴⣾⠋⠀⠀⣘⡼⠃")
+            print("⠀⢸⡇⢸⣷⣿⣤⣏⣉⣙⣏⣉⣹⣁⣀⣠⣼⣶⡾⠟⢻⣇⡼⠁⠀⠀⣰⠋⠀⠀")
+            print("⠀⢸⡇⠸⣿⡿⣿⢿⡿⢿⣿⠿⠿⣿⠛⠉⠉⢧⠀⣠⡴⠋⠀⠀⠀⣠⠇⠀⠀⠀")
+            print("⠀⢸⠀⠀⠹⢯⣽⣆⣷⣀⣻⣀⣀⣿⣄⣤⣴⠾⢛⡉⢄⡢⢔⣠⠞⠁⠀⠀⠀⠀")
+            print("⠀⢸⠀⠀⠀⠢⣀⠀⠈⠉⠉⠉⠉⣉⣀⠠⣐⠦⠑⣊⡥⠞⠋⠀⠀⠀⠀⠀⠀⠀")
+            print("⠀⢸⡀⠀⠁⠂⠀⠀⠀⠀⠀⠀⠒⠈⠁⣀⡤⠞⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀")
+            print("⠀⠀⠙⠶⢤⣤⣤⣤⣤⡤⠴⠖⠚⠛⠉")
+
 
 # Start the game
 if __name__ == "__main__":
