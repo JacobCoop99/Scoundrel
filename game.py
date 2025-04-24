@@ -31,8 +31,10 @@ class Background:
     def update_cards(self):
         # Show the next set of cards once 3 cards are used
         if self.cards_shown < 2:
-            # self.deck = self.deck[3:] # this caused it to skip cards
-            self.cards_shown = 4
+            if len(self.deck) > 4:
+                self.cards_shown = 4 
+            else: 
+                self.cards_shown = len(self.deck)
 
 class Cards:
     # This class handles the aftermath of choosing a card.
@@ -123,6 +125,7 @@ class Turn:
                     print("Invalid input.")
                     run = input("Run from room? Y/N: ").strip().upper()
                 if run == "Y":
+                    print("")
                     current_room = self.background.deck[0:4]
                     self.background.deck = self.background.deck[4:]
                     self.background.deck.extend(current_room)
@@ -170,14 +173,14 @@ class Game:
 
         if self.background.health > 0:
             print("\
-▄██   ▄    ▄██████▄  ███    █▄        ▄█     █▄   ▄█  ███▄▄▄▄   \
-███   ██▄ ███    ███ ███    ███      ███     ███ ███  ███▀▀▀██▄ \
-███▄▄▄███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
-▀▀▀▀▀▀███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
-▄██   ███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
-███   ███ ███    ███ ███    ███      ███     ███ ███  ███   ███ \
-███   ███ ███    ███ ███    ███      ███ ▄█▄ ███ ███  ███   ███ \
- ▀█████▀   ▀██████▀  ████████▀        ▀███▀███▀  █▀    ▀█   █▀  \
+▄██   ▄    ▄██████▄  ███    █▄        ▄█     █▄   ▄█  ███▄▄▄▄   \n\
+███   ██▄ ███    ███ ███    ███      ███     ███ ███  ███▀▀▀██▄ \n\
+███▄▄▄███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+▀▀▀▀▀▀███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+▄██   ███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+███   ███ ███    ███ ███    ███      ███     ███ ███  ███   ███ \n\
+███   ███ ███    ███ ███    ███      ███ ▄█▄ ███ ███  ███   ███ \n\
+ ▀█████▀   ▀██████▀  ████████▀        ▀███▀███▀  █▀    ▀█   █▀  \n\
 ")                                                                
 
         else: 
@@ -206,7 +209,7 @@ if __name__ == "__main__":
         print("\n\n\n\n\n\n\n\n\n")
         print("\n\n\n\n\n\n\n\n\n")
         print("\n\n\n\n\n\n\n\n\n")
-        print("Welcome to...\n\n")
+        print("Welcome to...\n")
         print("\
     ▄████████  ▄████████  ▄██████▄  ███    █▄  ███▄▄▄▄   ████████▄     ▄████████    ▄████████  ▄█      \n\
   ███    ███ ███    ███ ███    ███ ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███ ███       \n\
@@ -217,9 +220,9 @@ if __name__ == "__main__":
    ▄█    ███ ███    ███ ███    ███ ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███ ███▌    ▄ \n\
  ▄████████▀  ████████▀   ▀██████▀  ████████▀   ▀█   █▀  ████████▀    ███    ███   ██████████ █████▄▄██ \n\
                                                                      ███    ███              ▀        ") 
-        start = input("\nStart New Run? Y/N\n").strip().upper()
+        start = input("\nStart New Run? Y/N\n\n").strip().upper()
         while start != "Y" and start != "N":
-            start = input("Start New Run? Y/N\n").strip().upper()
+            start = input("\nStart New Run? Y/N\n\n").strip().upper()
 
         if start == "Y":
             game_instance = Game()
