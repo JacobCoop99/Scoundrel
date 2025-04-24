@@ -108,12 +108,14 @@ class Turn:
         self.cards = cards
         self.chosen_card = None
         self.new_room = True
+        self.canrun = True
 
     def choose_card(self):
         print("\n\n")
         self.background.print_cards()
         print("Weapon: " + self.cards.weapon_str)
         print("Health:", self.background.health, "\n")
+
         try:
             if self.new_room: 
                 run= input("Run from room? Y/N: ").strip().upper()
@@ -127,6 +129,7 @@ class Turn:
                     self.background.print_cards()
                     print("Weapon: " + self.cards.weapon_str)
                     print("Health:", self.background.health, "\n")
+                    self.new_room = False
 
             card_index = int(input("Choose a card position to play (1-" + str(self.background.cards_shown) + "): ")) - 1
             if 0 <= card_index < self.background.cards_shown:
@@ -166,7 +169,17 @@ class Game:
             self.background.print_cards_left()
 
         if self.background.health > 0:
-            print("You win!!")
+            print("\
+▄██   ▄    ▄██████▄  ███    █▄        ▄█     █▄   ▄█  ███▄▄▄▄   \
+███   ██▄ ███    ███ ███    ███      ███     ███ ███  ███▀▀▀██▄ \
+███▄▄▄███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
+▀▀▀▀▀▀███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
+▄██   ███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \
+███   ███ ███    ███ ███    ███      ███     ███ ███  ███   ███ \
+███   ███ ███    ███ ███    ███      ███ ▄█▄ ███ ███  ███   ███ \
+ ▀█████▀   ▀██████▀  ████████▀        ▀███▀███▀  █▀    ▀█   █▀  \
+")                                                                
+
         else: 
             print("No Health You lose :(") 
             print("⠀    ⣀⣠⠤⠶⠶⣖⡛⠛⠿⠿⠯⠭⠍⠉⣉⠛⠚⠛⠲⣄⠀⠀⠀⠀⠀")
@@ -187,4 +200,30 @@ class Game:
 # Start the game
 if __name__ == "__main__":
     game_instance = Game()
-    game_instance.play()
+    playing = True
+    while playing: 
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("Welcome to...\n\n")
+        print("\
+    ▄████████  ▄████████  ▄██████▄  ███    █▄  ███▄▄▄▄   ████████▄     ▄████████    ▄████████  ▄█      \n\
+  ███    ███ ███    ███ ███    ███ ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███ ███       \n\
+  ███    █▀  ███    █▀  ███    ███ ███    ███ ███   ███ ███    ███   ███    ███   ███    █▀  ███       \n\
+  ███        ███        ███    ███ ███    ███ ███   ███ ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄     ███       \n\
+▀███████████ ███        ███    ███ ███    ███ ███   ███ ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███       \n\
+         ███ ███    █▄  ███    ███ ███    ███ ███   ███ ███    ███ ▀███████████   ███    █▄  ███       \n\
+   ▄█    ███ ███    ███ ███    ███ ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███ ███▌    ▄ \n\
+ ▄████████▀  ████████▀   ▀██████▀  ████████▀   ▀█   █▀  ████████▀    ███    ███   ██████████ █████▄▄██ \n\
+                                                                     ███    ███              ▀        ") 
+        start = input("\nStart New Run? Y/N\n").strip().upper()
+        while start != "Y" and start != "N":
+            start = input("Start New Run? Y/N\n").strip().upper()
+
+        if start == "Y":
+            game_instance = Game()
+            game_instance.play()
+            input("\nENTER to continue")
+        else:
+            playing = False
