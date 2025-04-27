@@ -31,8 +31,10 @@ class Background:
     def update_cards(self):
         # Show the next set of cards once 3 cards are used
         if self.cards_shown < 2:
-            # self.deck = self.deck[3:] # this caused it to skip cards
-            self.cards_shown = 4
+            if len(self.deck) > 4:
+                self.cards_shown = 4 
+            else: 
+                self.cards_shown = len(self.deck)
 
 class Cards:
     # This class handles the aftermath of choosing a card.
@@ -100,12 +102,14 @@ class Turn:
         self.cards = cards
         self.chosen_card = None
         self.new_room = True
+        self.canrun = True
 
     def choose_card(self):
         print("\n\n")
         self.background.print_cards()
         print("Weapon: " + self.cards.weapon_str)
         print("Health:", self.background.health, "\n")
+
         try:
             if self.new_room: 
                 run= input("Run from room? Y/N: ").strip().upper()
@@ -113,12 +117,14 @@ class Turn:
                     print("Invalid input.")
                     run = input("Run from room? Y/N: ").strip().upper()
                 if run == "Y":
+                    print("")
                     current_room = self.background.deck[0:4]
                     self.background.deck = self.background.deck[4:]
                     self.background.deck.extend(current_room)
                     self.background.print_cards()
                     print("Weapon: " + self.cards.weapon_str)
                     print("Health:", self.background.health, "\n")
+                    self.new_room = False
 
             card_index = int(input("Choose a card position to play (1-" + str(self.background.cards_shown) + "): ")) - 1
             if 0 <= card_index < self.background.cards_shown: #figures out which suit your card is to determine further steps
@@ -158,7 +164,17 @@ class Game:
             self.background.print_cards_left()
 
         if self.background.health > 0:
-            print("You win!!")
+            print("\
+▄██   ▄    ▄██████▄  ███    █▄        ▄█     █▄   ▄█  ███▄▄▄▄   \n\
+███   ██▄ ███    ███ ███    ███      ███     ███ ███  ███▀▀▀██▄ \n\
+███▄▄▄███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+▀▀▀▀▀▀███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+▄██   ███ ███    ███ ███    ███      ███     ███ ███▌ ███   ███ \n\
+███   ███ ███    ███ ███    ███      ███     ███ ███  ███   ███ \n\
+███   ███ ███    ███ ███    ███      ███ ▄█▄ ███ ███  ███   ███ \n\
+ ▀█████▀   ▀██████▀  ████████▀        ▀███▀███▀  █▀    ▀█   █▀  \n\
+")                                                                
+
         else: 
             print("No Health You lose :(") 
             print("⠀    ⣀⣠⠤⠶⠶⣖⡛⠛⠿⠿⠯⠭⠍⠉⣉⠛⠚⠛⠲⣄⠀⠀⠀⠀⠀")
@@ -179,4 +195,30 @@ class Game:
 # Start the game
 if __name__ == "__main__":
     game_instance = Game()
-    game_instance.play()
+    playing = True
+    while playing: 
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n")
+        print("Welcome to...\n")
+        print("\
+    ▄████████  ▄████████  ▄██████▄  ███    █▄  ███▄▄▄▄   ████████▄     ▄████████    ▄████████  ▄█      \n\
+  ███    ███ ███    ███ ███    ███ ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███ ███       \n\
+  ███    █▀  ███    █▀  ███    ███ ███    ███ ███   ███ ███    ███   ███    ███   ███    █▀  ███       \n\
+  ███        ███        ███    ███ ███    ███ ███   ███ ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄     ███       \n\
+▀███████████ ███        ███    ███ ███    ███ ███   ███ ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███       \n\
+         ███ ███    █▄  ███    ███ ███    ███ ███   ███ ███    ███ ▀███████████   ███    █▄  ███       \n\
+   ▄█    ███ ███    ███ ███    ███ ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███ ███▌    ▄ \n\
+ ▄████████▀  ████████▀   ▀██████▀  ████████▀   ▀█   █▀  ████████▀    ███    ███   ██████████ █████▄▄██ \n\
+                                                                     ███    ███              ▀        ") 
+        start = input("\nStart New Run? Y/N\n\n").strip().upper()
+        while start != "Y" and start != "N":
+            start = input("\nStart New Run? Y/N\n\n").strip().upper()
+
+        if start == "Y":
+            game_instance = Game()
+            game_instance.play()
+            input("\nENTER to continue")
+        else:
+            playing = False
