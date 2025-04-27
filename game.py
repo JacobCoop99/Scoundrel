@@ -77,14 +77,6 @@ class Cards:
         print("Weapon value", self.weapon_value)
         return self.weapon_value
 
-    ## I'm not sure what you planed to use stack() to do, but I handled the weapon behavior within black cards
-    #def stack(self, card):
-    #    # Stack of diamonds under the weapon.
-    #    card_val = self.card_value(card)
-    #    if self.stack_value is None or card_val < self.stack_value:
-    #        self.stack_value = card_val
-    #    return self.stack_value
-
     def card_value(self, card):
         # Returns the numerical value of a card.
         rank = card[:-1]  # Remove the suit symbol.
@@ -129,7 +121,7 @@ class Turn:
                     print("Health:", self.background.health, "\n")
 
             card_index = int(input("Choose a card position to play (1-" + str(self.background.cards_shown) + "): ")) - 1
-            if 0 <= card_index < self.background.cards_shown:
+            if 0 <= card_index < self.background.cards_shown: #figures out which suit your card is to determine further steps
                 self.background.cards_shown -= 1
                 self.chosen_card = self.background.deck.pop(card_index)
                 print("You played", self.chosen_card)
