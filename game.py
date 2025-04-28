@@ -196,29 +196,49 @@ class Game:
 if __name__ == "__main__":
     game_instance = Game()
     playing = True
-    while playing: 
-        print("\n\n\n\n\n\n\n\n\n")
-        print("\n\n\n\n\n\n\n\n\n")
-        print("\n\n\n\n\n\n\n\n\n")
-        print("\n\n\n\n\n\n\n\n\n")
+    
+    while playing:
+        print("\n" * 40)  
+
         print("Welcome to...\n")
-        print("\
-    ▄████████  ▄████████  ▄██████▄  ███    █▄  ███▄▄▄▄   ████████▄     ▄████████    ▄████████  ▄█      \n\
-  ███    ███ ███    ███ ███    ███ ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███ ███       \n\
-  ███    █▀  ███    █▀  ███    ███ ███    ███ ███   ███ ███    ███   ███    ███   ███    █▀  ███       \n\
-  ███        ███        ███    ███ ███    ███ ███   ███ ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄     ███       \n\
-▀███████████ ███        ███    ███ ███    ███ ███   ███ ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███       \n\
-         ███ ███    █▄  ███    ███ ███    ███ ███   ███ ███    ███ ▀███████████   ███    █▄  ███       \n\
-   ▄█    ███ ███    ███ ███    ███ ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███ ███▌    ▄ \n\
- ▄████████▀  ████████▀   ▀██████▀  ████████▀   ▀█   █▀  ████████▀    ███    ███   ██████████ █████▄▄██ \n\
-                                                                     ███    ███              ▀        ") 
-        start = input("\nStart New Run? Y/N\n\n").strip().upper()
-        while start != "Y" and start != "N":
+        print(r"""
+    ▄████████  ▄████████  ▄██████▄  ███    █▄  ███▄▄▄▄   ████████▄     ▄████████    ▄████████  ▄█      
+  ███    ███ ███    ███ ███    ███ ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███ ███       
+  ███    █▀  ███    █▀  ███    ███ ███    ███ ███   ███ ███    ███   ███    ███   ███    █▀  ███       
+  ███        ███        ███    ███ ███    ███ ███   ███ ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄     ███       
+▀███████████ ███        ███    ███ ███    ███ ███   ███ ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███       
+         ███ ███    █▄  ███    ███ ███    ███ ███   ███ ███    ███ ▀███████████   ███    █▄  ███       
+   ▄█    ███ ███    ███ ███    ███ ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███ ███▌    ▄ 
+ ▄████████▀  ████████▀   ▀██████▀  ████████▀   ▀█   █▀  ████████▀    ███    ███   ██████████ █████▄▄██ 
+                                                                     ███    ███              ▀        
+""")
+        instructions = ""
+        while instructions not in ("Y", "N"):
+            instructions = input("Need instructions? Y/N\n\n").strip().upper()
+            if instructions == "Y":
+                print("\nInstructions:")
+                print("You get a Room from the deck consisting of 4 cards.")
+                print("To move to the next room, you can either face the room (pick 3 cards) or run (shuffle and get 4 new cards),")
+                print("but you can't run from two rooms in a row.")
+                print("Hearts will heal you for the face value.(max 20)")
+                print("Black cards (Clubs and Spades) damage you for the face value.")
+                print("Diamonds are weapons that protect you from damage for the face value.")
+                print("Be careful, using your weapon on an enemy makes it duller, and it can only kill an enemy")
+                print("with a lower face value than the previous one.(resets after a new weapon)") 
+                print("If you have no weapon, you can use your fists to block damage.(0 value)")
+                print("The goal is to get through the deck without dying.")
+                print("If you run out of cards, you win.")
+                print("If you run out of health, you lose.")
+                print("Good luck!")   
+                print("\n")
+
+        start = ""
+        while start not in ("Y", "N"):
             start = input("\nStart New Run? Y/N\n\n").strip().upper()
 
         if start == "Y":
             game_instance = Game()
             game_instance.play()
-            input("\nENTER to continue")
+            input("\nPress ENTER to continue...")
         else:
             playing = False
